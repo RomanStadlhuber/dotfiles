@@ -43,7 +43,7 @@ main() {
     install_plugins
 
     echo
-    echo "Done. Run:  NVIM_APPNAME=$APPNAME nvim"
+    echo "Done. Reload the shell for changes to take effect."
 }
 
 # ---------------------------------------------------------------- dependencies
