@@ -16,7 +16,8 @@
 set -eu
 
 NVIM_VERSION=v0.12.4
-APPNAME=nvim-kick
+# https://stackoverflow.com/a/1371283
+APPNAME=${PWD##*/}
 
 main() {
     if [ "$(id -u)" -ne 0 ]; then
