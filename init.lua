@@ -10,6 +10,10 @@ vim.opt.smartcase = true
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.mouse = 'a'
 
+-- custom keymaps
+require('keymaps')
+
+
 -- autorefresh
 vim.opt.autoread = true
 vim.opt.updatetime = 250
