@@ -47,6 +47,12 @@ fetch() { # url sha256 dest
 }
 
 # ------------------------------------------------------------------ toolchain
+#
+# - rustup + the pinned Rust toolchain, installed into $WORK (not ~/.rustup)
+# - zig, the C compiler + linker that can target an old glibc. The download
+#   is checked against the sha256 from ziglang.org/download/index.json
+# - cargo-zigbuild, which makes cargo use zig as C compiler and linker
+# - every step is skipped when the pinned version is already in $WORK
 
 if [ ! -x "$CARGO_HOME/bin/rustup" ]; then
     echo "==> installing rustup into $WORK"
@@ -71,6 +77,12 @@ if ! cargo zigbuild --version 2>/dev/null | grep -q " $CARGO_ZIGBUILD_VERSION\$"
 fi
 
 # --------------------------------------------------------------------- source
+#
+# - download the tree-sitter-cli source archive (.crate) from crates.io
+# - check it against TS_CRATE_SHA256, the "cksum" of that version in the
+#   crates.io index (https://index.crates.io/tr/ee/tree-sitter-cli)
+# - unpack it, then patch build.rs for zig (see below). Fail if the patch
+#   no longer applies
 
 src="$WORK/tree-sitter-cli-$TS_VERSION"
 rm -rf "$src"
@@ -90,6 +102,11 @@ if grep -q 'dynamic-list' "$src/build.rs" || ! grep -q 'rustc-link-arg=-rdynamic
 fi
 
 # ---------------------------------------------------------------------- build
+#
+# - compile with the crate's own Cargo.lock (--locked), linked against
+#   glibc $GLIBC_VERSION symbols
+# - check that the binary runs, then copy it to OUT_DIR as the release
+#   asset, with a .sha256 file next to it
 
 echo "==> building tree-sitter-cli $TS_VERSION for $target (glibc $GLIBC_VERSION)"
 (cd "$src" && cargo zigbuild --quiet --release --locked --target "$target.$GLIBC_VERSION")
