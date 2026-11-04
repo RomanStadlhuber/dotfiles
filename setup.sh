@@ -23,8 +23,10 @@ NVIM_VERSION=v0.12.4
 TS_VERSION=0.27.1
 TS_RELEASE_URL=https://github.com/RomanStadlhuber/dotfiles/releases/download/tree-sitter-v${TS_VERSION}
 TS_SHA256_X86_64=28dd514c3e5cb58f5486e1e474600e79ac183d9b5c25c1ef8abb6c22a49f2a85
-# https://stackoverflow.com/a/1371283
-APPNAME=${PWD##*/}
+# The checkout's folder name is the NVIM_APPNAME. Take it from the script's
+# own location, so the script works from any working directory.
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+APPNAME=${SCRIPT_DIR##*/}
 
 main() {
     if [ "$(id -u)" -ne 0 ]; then

@@ -3,7 +3,7 @@
 `nvim-treesitter` (main branch) builds parsers with the `tree-sitter` CLI.
 Upstream binaries need glibc >= 2.39, so this repo ships its own build against glibc 2.17.
 
-- `setup.sh` downloads it from the `tree-sitter-v<version>` release into `~/.local/share/nvim-kick/bin`.
+- `setup.sh` downloads it from the `tree-sitter-v<version>` release into `~/.local/share/<appname>/bin` (`<appname>` = the checkout's folder name).
 - `lua/plugins/treesitter.lua` puts that dir first on nvim's `PATH`.
 - If the download fails, `setup.sh` builds it with `build.sh` in this folder (about 2-5 min).
 
