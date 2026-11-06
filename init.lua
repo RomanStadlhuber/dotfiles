@@ -9,6 +9,9 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.mouse = 'a'
+-- load a project's .nvim.lua (per-project settings, e.g. clangd in a docker
+-- container). nvim asks once per file before it runs one.
+vim.opt.exrc = true
 
 -- custom keymaps
 require('keymaps')
