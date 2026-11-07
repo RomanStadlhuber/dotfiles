@@ -23,8 +23,9 @@ return {
     config = function()
       -- basedpyright finds a uv project's <root>/.venv by itself.
       -- Its default mode ('recommended') is very strict. 'standard' is the
-      -- milder default. A project's pyproject.toml ([tool.basedpyright]
-      -- typeCheckingMode) overrides it.
+      -- milder default. A [tool.basedpyright] section in pyproject.toml (or a
+      -- pyrightconfig.json) replaces these settings. Without typeCheckingMode
+      -- there, basedpyright falls back to 'recommended'.
       vim.lsp.config('basedpyright', {
         settings = { basedpyright = { analysis = { typeCheckingMode = 'standard' } } },
       })

@@ -5,7 +5,7 @@
 local current_line_only = { current_line = true }
 
 vim.diagnostic.config({
-  severity_sort = true, -- errors win: line-end text shows the most severe one
+  severity_sort = true, -- errors first: signs, float and line-end text prefer them
   virtual_text = current_line_only, -- message at the line end, cursor line only
   float = { source = true }, -- name the server that reports it
 })
