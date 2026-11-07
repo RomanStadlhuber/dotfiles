@@ -11,7 +11,7 @@
 #   2. installs a pinned Neovim to /opt, symlinked into /usr/local/bin
 #   3. installs the tree-sitter CLI (glibc 2.17 build) for nvim-treesitter
 #   4. installs plugins at the commits recorded in lazy-lock.json,
-#      and the treesitter parsers
+#      the treesitter parsers, and the language servers (through mason)
 #
 # Usage:  ./setup.sh
 #
@@ -64,10 +64,14 @@ install_deps() {
     # ripgrep   - telescope live_grep
     # fd-find   - telescope find_files (installs as `fdfind` on Ubuntu)
     # make,gcc  - builds telescope-fzf-native
+    # unzip     - mason extracts clangd with it
+    # python3-venv - mason installs basedpyright into a python venv
     missing=""
-    for cmd in git curl tar rg fdfind make gcc; do
+    for cmd in git curl tar rg fdfind make gcc unzip python3; do
         command -v "$cmd" >/dev/null 2>&1 || missing="$missing $cmd"
     done
+    # python3-venv has no command of its own
+    python3 -c 'import ensurepip' 2>/dev/null || missing="$missing python3-venv"
 
     if [ -z "$missing" ]; then
         echo "==> dependencies already present"
@@ -77,7 +81,7 @@ install_deps() {
     echo "==> installing dependencies:$missing"
     $SUDO apt-get update -qq
     DEBIAN_FRONTEND=noninteractive $SUDO apt-get install -y -qq \
-        git curl tar ca-certificates ripgrep fd-find make gcc
+        git curl tar ca-certificates ripgrep fd-find make gcc unzip python3-venv
 }
 
 # --------------------------------------------------------------------- neovim
@@ -164,7 +168,8 @@ install_plugins() {
     # restore, NOT sync: restore installs at the SHAs in lazy-lock.json.
     # sync would update them and rewrite the lockfile.
     # lua/plugins/treesitter.lua blocks on the parser install when headless.
-    NVIM_APPNAME="$APPNAME" nvim --headless "+Lazy! restore" +qa
+    # MasonToolsInstallSync installs the servers in lua/plugins/lsp.lua.
+    NVIM_APPNAME="$APPNAME" nvim --headless "+Lazy! restore" +MasonToolsInstallSync +qa
 }
 
 main "$@"
