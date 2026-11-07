@@ -2,7 +2,7 @@
 -- system packages are needed. setup.sh runs :MasonToolsInstallSync to
 -- install them headless. The names are both mason package names and
 -- nvim-lspconfig config names.
-local servers = { 'clangd', 'basedpyright' }
+local servers = { 'clangd', 'basedpyright', 'ruff' }
 
 return {
   {
@@ -21,7 +21,13 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = { 'mason-org/mason.nvim' },
     config = function()
-      -- basedpyright finds a uv project's <root>/.venv by itself
+      -- basedpyright finds a uv project's <root>/.venv by itself.
+      -- Its default mode ('recommended') is very strict. 'standard' is the
+      -- milder default. A project's pyproject.toml ([tool.basedpyright]
+      -- typeCheckingMode) overrides it.
+      vim.lsp.config('basedpyright', {
+        settings = { basedpyright = { analysis = { typeCheckingMode = 'standard' } } },
+      })
       vim.lsp.enable(servers)
 
       -- nvim 0.12 already maps K (hover), grn (rename), gra (code action),

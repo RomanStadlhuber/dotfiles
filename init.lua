@@ -15,6 +15,7 @@ vim.opt.exrc = true
 
 -- custom keymaps
 require('keymaps')
+require('diagnostics')
 
 
 -- autorefresh
