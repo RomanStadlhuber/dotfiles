@@ -7,7 +7,19 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.clipboard = 'unnamedplus'
+-- yank to the system clipboard, but only when it is reachable. Without X
+-- access (e.g. a docker container without xhost) every yank would fail.
+local function clipboard_reachable()
+  if vim.fn.executable('xclip') == 0 then
+    return true -- other or no clipboard tool: nvim handles it
+  end
+  local r = vim.system({ 'xclip', '-selection', 'clipboard', '-t', 'TARGETS', '-o' }, { text = true })
+    :wait(1000)
+  return r.code ~= 124 and not (r.stderr or ''):find('open display')
+end
+if clipboard_reachable() then
+  vim.opt.clipboard = 'unnamedplus'
+end
 vim.opt.mouse = 'a'
 -- load a project's .nvim.lua (per-project settings, e.g. clangd in a docker
 -- container). nvim asks once per file before it runs one.

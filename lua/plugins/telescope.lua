@@ -7,7 +7,16 @@ return {
   },
   config = function()
     local telescope = require('telescope')
-    telescope.setup({})
+    -- include hidden files (dotfiles), but not the .git folder.
+    -- Files in .gitignore stay excluded.
+    local hidden = { '--hidden', '--glob', '!**/.git/*' }
+    telescope.setup({
+      pickers = {
+        find_files = { find_command = vim.list_extend({ 'rg', '--files' }, hidden) },
+        live_grep = { additional_args = hidden },
+        grep_string = { additional_args = hidden },
+      },
+    })
     pcall(telescope.load_extension, 'fzf')
 
     local builtin = require('telescope.builtin')
