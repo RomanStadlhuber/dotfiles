@@ -29,6 +29,8 @@ return {
       vim.lsp.config('basedpyright', {
         settings = { basedpyright = { analysis = { typeCheckingMode = 'standard' } } },
       })
+      -- adding this as incremental sync broke some c++ files while in edit
+      vim.lsp.config('clangd', { flags = { allow_incremental_sync = false } })
       vim.lsp.enable(servers)
 
       -- nvim 0.12 already maps K (hover), grn (rename), gra (code action),
