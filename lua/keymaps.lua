@@ -22,3 +22,15 @@ vim.keymap.set("v", "<leader>s", function()
     false
   )
 end, { desc = "Search and replace visual selection" })
+
+-- <C-s>: format with the attached LSP server (clangd, ruff), then save.
+-- Without a formatting server it only saves. In insert mode it also leaves
+-- insert mode. This replaces nvim's insert-mode <C-s> (signature help),
+-- which blink.cmp already shows by itself.
+vim.keymap.set({ 'n', 'i' }, '<C-s>', function()
+  vim.cmd.stopinsert()
+  if #vim.lsp.get_clients({ bufnr = 0, method = 'textDocument/formatting' }) > 0 then
+    vim.lsp.buf.format()
+  end
+  vim.cmd.write()
+end, { desc = 'Format and save' })
