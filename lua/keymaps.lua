@@ -23,6 +23,14 @@ vim.keymap.set("v", "<leader>s", function()
   )
 end, { desc = "Search and replace visual selection" })
 
+-- <leader>/: search only inside the lines that the window shows now.
+-- The line range is fixed when you press the keys. Scrolling does not move it.
+vim.keymap.set('n', '<leader>/', function()
+  local top = vim.fn.line('w0') - 1
+  local bottom = vim.fn.line('w$') + 1
+  vim.api.nvim_feedkeys('/\\%>' .. top .. 'l\\%<' .. bottom .. 'l', 'n', false)
+end, { desc = 'Search in visible window' })
+
 -- <C-s>: format with the attached LSP server (clangd, ruff), then save.
 -- Without a formatting server it only saves. In insert mode it also leaves
 -- insert mode. This replaces nvim's insert-mode <C-s> (signature help),
