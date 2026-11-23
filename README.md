@@ -35,6 +35,9 @@ Update with `chezmoi update`.
 > **Note:** chezmoi replaces an existing `~/.config/nvim`.
 > Without a terminal it does this without a prompt.
 
+> **Note:** The chezmoi path needs `XDG_CONFIG_HOME` unset or set to `~/.config`.
+> The symlink always goes to `~/.config/nvim`, but `setup.sh` reads `$XDG_CONFIG_HOME/nvim`.
+
 ### Layout
 
 - `.chezmoiroot` contains `home`. chezmoi reads only `home/`, so the repo root stays a plain Neovim config.
