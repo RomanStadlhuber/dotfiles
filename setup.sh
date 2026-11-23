@@ -1,10 +1,11 @@
 #!/bin/sh
 #
-# PRELIMINARY setup script.
+# Installs Neovim and this config from scratch.
 #
-# Assumes this repo has ALREADY been cloned by hand to ~/.config/$APPNAME.
-# It does not fetch the config itself — that comes later, once the repo is
-# public and can be curl'd without credentials.
+# Assumes this repo is ALREADY checked out at ~/.config/$APPNAME, as a clone
+# or as a symlink to a clone. The folder name is the NVIM_APPNAME.
+# This script does not need chezmoi. The chezmoi install calls it through
+# the ~/.config/nvim symlink (see README.md).
 #
 # What it does:
 #   1. installs apt dependencies
