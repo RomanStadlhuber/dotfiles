@@ -1,10 +1,11 @@
 #!/bin/sh
 #
-# PRELIMINARY setup script.
+# Installs Neovim and this config from scratch.
 #
-# Assumes this repo has ALREADY been cloned by hand to ~/.config/$APPNAME.
-# It does not fetch the config itself — that comes later, once the repo is
-# public and can be curl'd without credentials.
+# Assumes this repo is ALREADY checked out at ~/.config/$APPNAME, as a clone
+# or as a symlink to a clone. The folder name is the NVIM_APPNAME.
+# This script does not need chezmoi. The chezmoi install calls it through
+# the ~/.config/nvim symlink (see README.md).
 #
 # What it does:
 #   1. installs apt dependencies
@@ -12,6 +13,7 @@
 #   3. installs the tree-sitter CLI (glibc 2.17 build) for nvim-treesitter
 #   4. installs plugins at the commits recorded in lazy-lock.json,
 #      the treesitter parsers, and the language servers (through mason)
+#   5. sets this Neovim as the git editor
 #
 # Usage:  ./setup.sh
 #
@@ -51,6 +53,7 @@ main() {
     install_neovim
     install_tree_sitter
     install_plugins
+    configure_git
 
     echo
     echo "Done. Reload the shell for changes to take effect."
@@ -170,6 +173,18 @@ install_plugins() {
     # lua/plugins/treesitter.lua blocks on the parser install when headless.
     # MasonToolsInstallSync installs the servers in lua/plugins/lsp.lua.
     NVIM_APPNAME="$APPNAME" nvim --headless "+Lazy! restore" +MasonToolsInstallSync +qa
+}
+
+# ------------------------------------------------------------------------ git
+
+configure_git() {
+    # Without core.editor or $EDITOR, git runs `vi`. On Ubuntu that can be an
+    # old apt Neovim (0.6), which cannot load this config. Use the absolute
+    # path, and pass NVIM_APPNAME so git opens this config, not ~/.config/nvim.
+    editor="NVIM_APPNAME=$APPNAME /usr/local/bin/nvim"
+    echo "==> setting git core.editor"
+    git config --global core.editor "$editor"
+    echo "    $(git config --global --get core.editor)"
 }
 
 main "$@"

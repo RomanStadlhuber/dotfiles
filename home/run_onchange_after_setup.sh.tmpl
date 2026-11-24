@@ -1,0 +1,9 @@
+#!/bin/sh
+# chezmoi reruns this script only when its rendered text changes.
+# The two lines below change when the plugin lock or the Neovim pin changes.
+# lazy-lock.json sha256: {{ include "../lazy-lock.json" | sha256sum }}
+# {{ include "../setup.sh" | regexFind "NVIM_VERSION=[^\n]*" }}
+set -eu
+# Call setup.sh through the ~/.config/nvim symlink. setup.sh takes the
+# NVIM_APPNAME from its folder name, so this gives "nvim", not "chezmoi".
+exec "{{ .chezmoi.destDir }}/.config/nvim/setup.sh"
