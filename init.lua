@@ -60,6 +60,22 @@ if not vim.uv.fs_stat(lazypath) then
     vim.notify('lazy.nvim clone failed — continuing without plugins', vim.log.levels.ERROR)
     return
   end
+  -- The clone gets the tip of `stable`. `Lazy! restore` does not move
+  -- lazy.nvim itself, so check out the commit from lazy-lock.json here.
+  -- Else lazy writes a new lazy.nvim commit into the lockfile.
+  local lockfile = vim.fn.stdpath('config') .. '/lazy-lock.json'
+  local f = io.open(lockfile, 'r')
+  if f then
+    local ok_json, lock = pcall(vim.json.decode, f:read('*a'))
+    f:close()
+    local commit = ok_json and lock['lazy.nvim'] and lock['lazy.nvim'].commit
+    if commit then
+      local co = vim.system({ 'git', '-C', lazypath, 'checkout', '--quiet', commit }):wait()
+      if co.code ~= 0 then
+        vim.notify('lazy.nvim checkout of ' .. commit .. ' failed', vim.log.levels.WARN)
+      end
+    end
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
