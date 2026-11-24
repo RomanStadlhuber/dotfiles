@@ -3,6 +3,18 @@
 Neovim config, a pinned Neovim, and the git editor setting.
 There are two ways to install it.
 
+## Quick start (recommended)
+
+Needs `curl` and `git`. On a bare Ubuntu: `sudo apt-get install -y curl git`.
+
+```bash
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply RomanStadlhuber/dotfiles
+```
+
+This installs chezmoi, links the config to `~/.config/nvim` and runs `setup.sh`.
+It replaces an existing `~/.config/nvim`.
+For a machine where chezmoi is not wanted, use `setup.sh` (below).
+
 ## Install with `setup.sh` (no chezmoi)
 
 ```bash
