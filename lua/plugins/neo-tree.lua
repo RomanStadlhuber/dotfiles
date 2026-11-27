@@ -51,6 +51,8 @@ return {
     filesystem = {
       -- show dotfiles. Gitignored files stay hidden. `H` toggles them.
       filtered_items = { hide_dotfiles = false },
+      -- expand the tree to the file of the current buffer
+      follow_current_file = { enabled = true },
     },
   },
 }

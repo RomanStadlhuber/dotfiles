@@ -10,6 +10,15 @@ return {
   },
   -- dropbar attaches to the winbar at startup, so load it at once
   lazy = false,
+  init = function()
+    -- subtle accent: reuse a low-contrast background group
+    local function link()
+      vim.api.nvim_set_hl(0, 'WinBar', { link = 'StatusLineNC' })
+      vim.api.nvim_set_hl(0, 'WinBarNC', { link = 'StatusLineNC' })
+    end
+    link()
+    vim.api.nvim_create_autocmd('ColorScheme', { callback = link })
+  end,
   opts = {
     icons = {
       enable = nerd and true or false,
