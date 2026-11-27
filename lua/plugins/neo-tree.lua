@@ -28,6 +28,8 @@ return {
       indent = nerd and {} or {
         expander_collapsed = '+',
         expander_expanded = '-',
+        indent_marker = '|',
+        last_indent_marker = '`',
       },
       git_status = {
         symbols = nerd and {} or {
@@ -42,19 +44,13 @@ return {
           conflict = '[!]',
         },
       },
+      diagnostics = nerd and {} or {
+        symbols = { hint = 'H', info = 'I', warn = 'W', error = 'E' },
+      },
     },
     filesystem = {
       -- show dotfiles. Gitignored files stay hidden. `H` toggles them.
       filtered_items = { hide_dotfiles = false },
     },
   },
-  config = function(_, opts)
-    if not nerd then
-      -- neo-tree reads diagnostic symbols from the diagnostic config
-      opts.default_component_configs.diagnostics = {
-        symbols = { hint = 'H', info = 'I', warn = 'W', error = 'E' },
-      }
-    end
-    require('neo-tree').setup(opts)
-  end,
 }
