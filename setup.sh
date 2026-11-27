@@ -57,6 +57,17 @@ main() {
 
     echo
     echo "Done. Reload the shell for changes to take effect."
+    echo
+    echo "Optional: install FiraCode Nerd Font for icons. Run this on the machine"
+    echo "that runs the terminal. Then set the terminal font to"
+    echo "'FiraCode Nerd Font Mono' and export LC_NERD_FONT=1:"
+    echo
+    cat <<'FONT_EOF'
+mkdir -p ~/.local/share/fonts/FiraCodeNerd
+curl -fL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.tar.xz \
+  | tar -xJ -C ~/.local/share/fonts/FiraCodeNerd
+fc-cache -f
+FONT_EOF
 }
 
 # ---------------------------------------------------------------- dependencies

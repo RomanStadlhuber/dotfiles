@@ -3,6 +3,12 @@
 local general = [[
 # General
 
+## Tree, breadcrumbs, markdown
+`<leader>e` toggle file tree
+`H` (in the tree) show / hide gitignored files
+`<leader>;` pick a breadcrumb
+`<leader>tm` toggle markdown rendering
+
 ## Telescope
 `<leader>ff` files, `<leader>fg` grep
 `<leader>fb` buffers, `<leader>fr` recent
@@ -97,7 +103,8 @@ local function open()
   for _, l in ipairs(lines) do
     width = math.max(width, vim.fn.strdisplaywidth(l))
   end
-  width = math.min(width + 2, vim.o.columns - 2)
+  -- +4: room for the heading icons of the rendered markdown
+  width = math.min(width + 4, vim.o.columns - 2)
   -- cmdheight and the border take 2 lines each (border: top and bottom)
   local max_height = math.max(vim.o.lines - vim.o.cmdheight - 2, 1)
   local height = math.min(#lines, max_height)
@@ -114,8 +121,6 @@ local function open()
     title_pos = 'center',
   })
   vim.wo[win].wrap = false
-  vim.wo[win].conceallevel = 2
-  vim.wo[win].concealcursor = 'nvc'
 
   local function close()
     if vim.api.nvim_win_is_valid(win) then

@@ -23,6 +23,19 @@ return {
       -- Without an open menu it keeps nvim's insert-mode <C-d> (de-indent).
       ['<C-d>'] = { 'cancel', 'fallback' },
     },
+    -- Nerd Font glyphs (blink default) only with vim.g.have_nerd_font.
+    -- Else bracketed text for every kind.
+    appearance = {
+      kind_icons = not vim.g.have_nerd_font and {
+        Text = '[text]', Method = '[method]', Function = '[fn]', Constructor = '[ctor]',
+        Field = '[field]', Variable = '[var]', Property = '[prop]', Class = '[class]',
+        Interface = '[iface]', Struct = '[struct]', Module = '[mod]', Unit = '[unit]',
+        Value = '[value]', Enum = '[enum]', EnumMember = '[member]', Keyword = '[kw]',
+        Constant = '[const]', Snippet = '[snippet]', Color = '[color]', File = '[file]',
+        Reference = '[ref]', Folder = '[dir]', Event = '[event]', Operator = '[op]',
+        TypeParameter = '[tparam]',
+      } or nil,
+    },
     signature = { enabled = true }, -- show the signature while typing arguments
   },
 }
