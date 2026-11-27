@@ -114,6 +114,8 @@ local function open()
     title_pos = 'center',
   })
   vim.wo[win].wrap = false
+  vim.wo[win].conceallevel = 2
+  vim.wo[win].concealcursor = 'nvc'
 
   local function close()
     if vim.api.nvim_win_is_valid(win) then
