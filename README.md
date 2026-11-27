@@ -16,12 +16,12 @@ fc-cache -f
 ```
 
 Then set the terminal font to `FiraCode Nerd Font Mono`.
-Without the font, the config shows plain ASCII.
+Without the font, the config shows no Nerd Font glyphs. It uses ASCII and plain Unicode (tree lines, borders) instead.
 
 ## `LC_NERD_FONT`
 
 Set `LC_NERD_FONT=1` to turn on Nerd Font icons.
-Neovim reads it at every start. Unset or `0` means ASCII.
+Neovim reads it at every start. Unset or `0` means no Nerd Font glyphs.
 
 - Local shell: add `export LC_NERD_FONT=1` to the shell rc.
 - SSH: stock configs forward `LC_*` already.

@@ -1,5 +1,5 @@
--- file tree. ASCII symbols by default, Nerd Font icons with vim.g.have_nerd_font
--- (see init.lua).
+-- file tree. Nerd Font icons only with vim.g.have_nerd_font (see init.lua).
+-- Else ASCII replaces the Nerd glyphs. Plain Unicode defaults (tree lines) stay.
 local nerd = vim.g.have_nerd_font
 
 return {
@@ -28,8 +28,6 @@ return {
       indent = nerd and {} or {
         expander_collapsed = '+',
         expander_expanded = '-',
-        indent_marker = '|',
-        last_indent_marker = '`',
       },
       git_status = {
         symbols = nerd and {} or {

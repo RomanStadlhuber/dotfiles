@@ -1,26 +1,19 @@
--- rendered markdown in normal mode. ASCII by default, Nerd Font glyphs with
--- vim.g.have_nerd_font (see init.lua).
+-- rendered markdown in normal mode. Nerd Font glyphs only with
+-- vim.g.have_nerd_font (see init.lua). Else ASCII replaces the Nerd glyphs.
+-- Plain Unicode defaults (bullets, borders, table lines) stay.
 local nerd = vim.g.have_nerd_font
 
--- plugin defaults that use Nerd Font or box-drawing glyphs, replaced with ASCII
+-- plugin defaults that use Nerd Font glyphs, replaced with ASCII
 local ascii = {
   sign = { enabled = false },
   -- an empty inline icon still hides the `#` marker. A nil icon does not.
   heading = { position = 'inline', icons = { '' }, sign = false },
-  bullet = { icons = { '-', '-', '-', '-' } },
   checkbox = {
     unchecked = { icon = '[ ]' },
     checked = { icon = '[x]' },
     custom = { todo = { rendered = '[-]' } },
   },
-  code = { language_icon = false, sign = false, language_border = ' ', above = ' ', below = ' ' },
-  dash = { icon = '-' },
-  quote = { icon = '|' },
-  indent = { icon = '|' },
-  pipe_table = {
-    border = { '+', '+', '+', '+', '+', '+', '+', '+', '+', '|', '-' },
-    alignment_indicator = ':',
-  },
+  code = { language_icon = false, sign = false },
   -- links only add icons
   link = { enabled = false },
   callout = {},
