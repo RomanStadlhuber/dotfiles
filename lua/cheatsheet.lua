@@ -45,7 +45,10 @@ local c_cpp = {
   '    .clang-tidy    extra diagnostics',
   '  .nvim.lua in the project root can run clangd in docker:',
   "    vim.lsp.config('clangd', {",
-  "      cmd = { 'docker', 'exec', '-i', '<container>', 'clangd' },",
+  "      cmd = {",
+  "        'docker', 'exec', '-i', '-u', '<uid>:<gid>', '<container>',",
+  "        'clangd', '--path-mappings=<host dir>=<container dir>',",
+  "      },",
   '    })',
 }
 
@@ -112,5 +115,3 @@ local function open()
 end
 
 vim.api.nvim_create_user_command('Cheatsheet', open, { desc = 'Show the key cheatsheet' })
-
-return { build_lines = build_lines }
