@@ -1,84 +1,95 @@
 -- :Cheatsheet opens a float with the key list. "General" always shows.
 -- A language section shows when the current buffer has a matching filetype.
-local general = {
-  'General',
-  '',
-  '  Telescope',
-  '    <leader>ff  files          <leader>fg  grep',
-  '    <leader>fb  buffers        <leader>fr  recent',
-  '    <leader>fh  help',
-  '  Search',
-  '    <leader>/   search the visible lines only',
-  '    <leader>s   (visual) search + replace the selection',
-  '  LSP',
-  '    gd   definition            grr  references (Telescope)',
-  '    K    hover                 grn  rename',
-  '    gra  code action           gri  implementation',
-  '    grt  type definition       gO   document symbols',
-  '    <C-]>  tag jump            <C-w>]  jump in split',
-  '    <C-w>}  preview window',
-  '  Diagnostics',
-  '    ]d / [d  next / previous   <C-w>d  float',
-  '    <leader>td  toggle all',
-  '    <leader>tv  line-end text: cursor line / all lines',
-  '  Edit',
-  '    <C-s>  format + save (normal and insert)',
-  '  Completion (blink.cmp, insert mode)',
-  '    <C-space>  open menu (again: show / hide docs)',
-  '    <C-n> / <C-p> or <Down> / <Up>  select',
-  '    <C-y>  accept              <C-e> or <C-d>  close',
-  '    <C-b> / <C-f>  scroll docs',
-  '    <Tab> / <S-Tab>  next / previous snippet field',
-  '    <C-k>  show / hide signature',
-  '    :lua vim.b.completion = false  turns completion off for the buffer',
-}
+local general = [[
+# General
 
-local c_cpp = {
-  'C/C++',
-  '',
-  '    <leader>h  switch header/source',
-  '    <leader>H  header/source side by side',
-  '  Project files',
-  '    compile_commands.json  navigation',
-  '      (CMake: -DCMAKE_EXPORT_COMPILE_COMMANDS=ON)',
-  '    .clang-format  used by <C-s>',
-  '    .clang-tidy    extra diagnostics',
-  '  .nvim.lua in the project root can run clangd in docker:',
-  "    vim.lsp.config('clangd', {",
-  "      cmd = {",
-  "        'docker', 'exec', '-i', '-u', '<uid>:<gid>', '<container>',",
-  "        'clangd', '--path-mappings=<host dir>=<container dir>',",
-  "      },",
-  '    })',
-}
+## Telescope
+`<leader>ff` files, `<leader>fg` grep
+`<leader>fb` buffers, `<leader>fr` recent
+`<leader>fh` help
 
-local python = {
-  'Python',
-  '',
-  '  Project files',
-  '    ruff: reads [tool.ruff] in pyproject.toml',
-  '    basedpyright: reads typeCheckingMode from [tool.basedpyright]',
-  '      in pyproject.toml or from pyrightconfig.json',
-  '      (this config defaults to "standard")',
-  '    uv projects: basedpyright finds .venv without config',
-}
+## Search
+`<leader>/` search the visible lines only
+`<leader>s` (visual) search + replace the selection
+
+## LSP
+`gd` definition, `grr` references (Telescope)
+`K` hover, `grn` rename
+`gra` code action, `gri` implementation
+`grt` type definition, `gO` document symbols
+`<C-]>` tag jump, `<C-w>]` jump in split
+`<C-w>}` preview window
+
+## Diagnostics
+`]d` / `[d` next / previous, `<C-w>d` float
+`<leader>td` toggle all
+`<leader>tv` line-end text: cursor line / all lines
+
+## Edit
+`<C-s>` format + save (normal and insert)
+
+## Completion (blink.cmp, insert mode)
+`<C-space>` open menu (again: show / hide docs)
+`<C-n>` / `<C-p>` or `<Down>` / `<Up>` select
+`<C-y>` accept, `<C-e>` or `<C-d>` close
+`<C-b>` / `<C-f>` scroll docs
+`<Tab>` / `<S-Tab>` next / previous snippet field
+`<C-k>` show / hide signature
+`:lua vim.b.completion = false` turns completion off for the buffer
+]]
+
+local c_cpp = [[
+# C/C++
+
+`<leader>h` switch header/source
+`<leader>H` header/source side by side
+
+## Project files
+`compile_commands.json` navigation
+(CMake: `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`)
+`.clang-format` used by `<C-s>`
+`.clang-tidy` extra diagnostics
+
+## clangd in docker
+`.nvim.lua` in the project root can run clangd in docker:
+
+```lua
+vim.lsp.config('clangd', {
+  cmd = {
+    'docker', 'exec', '-i', '-u', '<uid>:<gid>', '<container>',
+    'clangd', '--path-mappings=<host dir>=<container dir>',
+  },
+})
+```
+]]
+
+local python = [[
+# Python
+
+## Project files
+ruff: reads `[tool.ruff]` in `pyproject.toml`
+basedpyright: reads `typeCheckingMode` from `[tool.basedpyright]`
+in `pyproject.toml` or from `pyrightconfig.json`
+(this config defaults to `standard`)
+uv projects: basedpyright finds `.venv` without config
+]]
 
 local sections_by_ft = { c = c_cpp, cpp = c_cpp, python = python }
 
 local function build_lines(ft)
-  local lines = vim.deepcopy(general)
+  local text = general
   local extra = sections_by_ft[ft]
   if extra then
-    table.insert(lines, '')
-    vim.list_extend(lines, extra)
+    text = text .. '\n' .. extra
   end
-  return lines
+  return vim.split(vim.trim(text), '\n')
 end
 
 local function open()
   local lines = build_lines(vim.bo.filetype)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].filetype = 'markdown'
   vim.bo[buf].modifiable = false
   vim.bo[buf].bufhidden = 'wipe'
 
