@@ -15,6 +15,14 @@ return {
   keys = {
     { '<leader>e', '<cmd>Neotree toggle<cr>', desc = 'Toggle file tree' },
   },
+  init = function()
+    -- tree lines: the default highlight is too dim to see
+    local function link()
+      vim.api.nvim_set_hl(0, 'NeoTreeIndentMarker', { link = 'Comment' })
+    end
+    link()
+    vim.api.nvim_create_autocmd('ColorScheme', { callback = link })
+  end,
   opts = {
     default_component_configs = {
       icon = nerd and {} or {
