@@ -80,4 +80,9 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Nerd Font icons only with LC_NERD_FONT set (and not 0). The variable
+-- follows the terminal over SSH and into containers. Else Nerd glyphs are ASCII.
+local nerd_env = vim.env.LC_NERD_FONT
+vim.g.have_nerd_font = nerd_env ~= nil and nerd_env ~= '' and nerd_env ~= '0'
+
 require('lazy').setup({ import = 'plugins' })

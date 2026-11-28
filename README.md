@@ -3,6 +3,31 @@
 Neovim config, a pinned Neovim, and the git editor setting.
 There are two ways to install it.
 
+## Font (optional)
+
+Icons need a Nerd Font on the machine that runs the terminal.
+Install FiraCode Nerd Font:
+
+```bash
+mkdir -p ~/.local/share/fonts/FiraCodeNerd
+curl -fL https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.tar.xz \
+  | tar -xJ -C ~/.local/share/fonts/FiraCodeNerd
+fc-cache -f
+```
+
+Then set the terminal font to `FiraCode Nerd Font Mono`.
+Without the font, the config shows no Nerd Font glyphs. It uses ASCII and plain Unicode (tree lines, borders) instead.
+
+## `LC_NERD_FONT`
+
+Set `LC_NERD_FONT=1` to turn on Nerd Font icons.
+Neovim reads it at every start. Unset or `0` means no Nerd Font glyphs.
+
+- Local shell: add `export LC_NERD_FONT=1` to the shell rc.
+- SSH: stock configs forward `LC_*` already.
+- Docker: add `environment: [LC_NERD_FONT]` (compose) or use `docker run -e LC_NERD_FONT` / `docker exec -e LC_NERD_FONT`.
+- tmux / byobu: add `set -ga update-environment LC_NERD_FONT` to the tmux config.
+
 ## Quick start (recommended)
 
 Needs `curl` and `git`. On a bare Ubuntu: `sudo apt-get install -y curl git`.
